@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101116">
+  <title>{% block title %}Dashboard{% endblock %} · FitManager</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+<body>
+{% if session.get('logged_in') %}
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <a class="brand" href="{{ url_for('dashboard') }}"><b>F</b><span>FitManager<small>GYM ADMIN</small></span></a>
+    <p class="navlabel">WORKSPACE</p>
+    <button class="mobile-menu" type="button" aria-label="Toggle navigation" aria-expanded="false" onclick="toggleNav(this)">☰</button>
+    <a class="nav {{ 'on' if request.endpoint=='dashboard' }}" href="{{ url_for('dashboard') }}"><span aria-hidden="true">▦</span> Dashboard</a>
+    <a class="nav {{ 'on' if request.endpoint in ['members','new_member','member_detail'] }}" href="{{ url_for('members') }}"><span aria-hidden="true">♙</span> Members</a>
+    <a class="nav {{ 'on' if request.endpoint=='attendance' }}" href="{{ url_for('attendance') }}"><span aria-hidden="true">◷</span> Attendance</a>
+    <a class="nav {{ 'on' if request.endpoint=='payments_page' }}" href="{{ url_for('payments_page') }}"><span aria-hidden="true">₹</span> Payments</a>
+    <div class="sidebottom"><i></i><span>System online<small>FitManager · Admin workspace</small></span></div>
+  </aside>
+  <main class="main">
+    <header><div>{{ today.strftime('%a, %d %b %Y') }} <span class="avatar">{{ session.get('username','A')[:1]|upper }}</span> {{ session.get('username','Admin') }} <a class="signout" href="{{ url_for('logout') }}">Sign out ↗</a></div></header>
+    <section class="content">
+      {% with msgs=get_flashed_messages(with_categories=true) %}{% for cat,msg in msgs %}<div class="flash {{ cat }}" role="status" aria-live="polite">{{ msg }}<button type="button" aria-label="Dismiss message" onclick="this.parentElement.remove()">×</button></div>{% endfor %}{% endwith %}
+      {% block content %}{% endblock %}
+    </section>
+  </main>
+</div>
+{% else %}
+  {% with msgs=get_flashed_messages(with_categories=true) %}{% for cat,msg in msgs %}<div class="flash {{ cat }}" role="status">{{ msg }}</div>{% endfor %}{% endwith %}
+  {% block public_content %}{% endblock %}
+{% endif %}
+<script>
+function toggleNav(button){const sidebar=document.getElementById('sidebar');const opened=sidebar.classList.toggle('open');button.setAttribute('aria-expanded',String(opened));}
+document.addEventListener('submit',function(event){const form=event.target;if(!form.matches('form'))return;if(form.dataset.confirm && !window.confirm(form.dataset.confirm)){event.preventDefault();return;}const submitter=event.submitter;if(submitter && !submitter.disabled){submitter.dataset.originalText=submitter.textContent.trim();submitter.textContent='Please wait…';submitter.disabled=true;}});
+</script>
+</body>
+</html>

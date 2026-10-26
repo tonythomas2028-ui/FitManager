@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Admin sign in{% endblock %}
+{% block public_content %}
+<main class="login-page">
+  <section class="loginhero" aria-label="FitManager motivation">
+    <img class="login-poster" src="{{ url_for('static', filename='cosmic-strength.png') }}" alt="Motivational strength poster: No excuses. No limits. Become unstoppable." fetchpriority="high">
+    <a class="login-brand" href="#" aria-label="FitManager"><b class="logo">F</b><span>FitManager<small>GYM MANAGEMENT</small></span></a>
+    <div class="hero-status"><span class="status-dot" aria-hidden="true"></span><span>DISCIPLINE STARTS HERE</span></div>
+  </section>
+  <section class="loginform" aria-labelledby="login-title">
+    <div class="loginbox">
+      <div class="login-form-brand"><b class="logo">F</b><span>FitManager</span></div>
+      <p class="eyebrow">ADMINISTRATOR ACCESS</p>
+      <h1 id="login-title">Welcome back.</h1>
+      <p class="login-intro">Sign in to manage your gym, members, attendance and payments.</p>
+      <form method="post" autocomplete="on">
+        <label for="username">Username<input id="username" name="username" required autocomplete="username" placeholder="Enter your username"></label>
+        <label for="password">Password<input id="password" name="password" type="password" required autocomplete="current-password" placeholder="Enter your password"></label>
+        <button class="btn primary wide" type="submit">Sign in <span aria-hidden="true">→</span></button>
+      </form>
+      <div class="login-security"><span class="security-icon" aria-hidden="true">✓</span><span><strong>Private admin workspace</strong><small>Authorized access only. Keep your credentials secure.</small></span></div>
+    </div>
+  </section>
+</main>
+{% endblock %}

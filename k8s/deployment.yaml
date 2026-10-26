@@ -1,0 +1,42 @@
+﻿
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fitmanager
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fitmanager
+  template:
+    metadata:
+      labels:
+        app: fitmanager
+    spec:
+      containers:
+        - name: fitmanager
+          image: fitmanager:1.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          env:
+            - name: APP_ENV
+              value: "production"
+            - name: SECRET_KEY
+              value: "local-demo-secret-change-before-public-deployment"
+            - name: ADMIN_USERNAME
+              value: "admin"
+            - name: ADMIN_PASSWORD
+              value: "admin123"
