@@ -3,8 +3,7 @@ services:
     name: fitmanager
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
-    healthCheckPath: /health
+startCommand: flask --app app init-db && gunicorn --bind 0.0.0.0:$PORT --workers 2 app:app    healthCheckPath: /health
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.8
